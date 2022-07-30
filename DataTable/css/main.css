@@ -1,0 +1,48 @@
+table{
+    border: 1px solid black;
+    width: 600px;
+    margin:  0 auto;
+    margin-top: 50px;
+
+
+}
+
+tr{
+    border:  1px solid black;
+}
+
+td{
+    border: 1px solid black;
+    text-align:  center;
+}
+
+.data-tableContener{
+    width: 100%;
+    
+}
+th{
+    border:  1px solid black;
+}
+
+
+.select{
+    margin-left: 400px;
+    width: 50px;
+}
+
+
+.paginettion{
+    display: flex;
+    justify-content: center;
+}
+
+.paginettion>li>a{
+    margin-left: 30px;
+    text-decoration: none;
+}
+
+.paginettion>li{
+    list-style: none;
+}
+
+
