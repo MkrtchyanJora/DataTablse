@@ -11,20 +11,24 @@ class DataTable {
         this.createThead();
         const $tbody = this.createBody();
         $table.appendChild($tbody);
+
         const $trs = this.renderData();
         console.log($trs);
         $trs.forEach(($tr) => {
             $tbody.appendChild($tr);
         });
+
+
+
+        ////////////////////////////////////////
         const $selects = this.createSelect()
         $table.before($selects)
 
         $selects.onchange = rowCounte
         function rowCounte(e) {
             let neil = poginetion.querySelectorAll('.list');
-            neil.forEach((n) => {
-                n.remove()
-            })
+            neil.forEach(e => e.remove())
+
             let limit = parseInt(e.target.value);
             displayPage(limit)
 
@@ -39,9 +43,9 @@ class DataTable {
             for (let i = 0; i < limit; i++) {
 
                 $tbody.appendChild($array[i])
-                buttonGenerator(limit)
-            }
 
+            }
+            buttonGenerator(limit)
 
 
 
@@ -85,24 +89,26 @@ class DataTable {
                     }
                 }
             }
-            let z = 0
+
+            let z = 0;
             function nextElement() {
-                if (this.id === 'next') {
-                    z === $array.length - limit ? (z = 0) : (z += limit);
+                if (this.id == 'next') {
+                    z == $array.length - limit ? (z = 0) : (z += limit);
                 }
 
-                if (this.id === 'prev') {
-                    z === 0 ? $array.length - limit : (z -= limit);
+                if (this.id == 'prev') {
+                    z == 0 ? $array.length - limit : (z -= limit);
                 }
 
-                $tbody.innerHTML = ''
+                $tbody.innerHTML = '';
                 for (let c = z; c < z + limit; c++) {
-                    $tbody.appendChild($array[c]);
+                    $tbody.appendChild($array[c])
                 }
+
 
             }
-            document.getElementById('prev').onclick = nextElement;
-            document.getElementById('next').onclick = nextElement;
+            document.getElementById('prev').onclick = nextElement
+            document.getElementById('next').onclick = nextElement
         }
 
 
@@ -162,17 +168,29 @@ class DataTable {
     createSelect() {
         const $select = document.createElement('select')
         $select.className = 'select'
-        const $trs = this.renderData()
-        const $tbody = this.createBody()
-        for (let i = 1; i <= 5; i++) {
-            let $option = document.createElement('option')
-            $option.value = i
-            $option.innerHTML = i
-            $select.appendChild($option)
+        let $option1 = document.createElement('option')
+        $option1.value = '1'
+        $option1.innerHTML = 1
+        let $option2 = document.createElement('option')
+        $option2.value = '2'
+        $option2.innerHTML = 2
+        let $option3 = document.createElement('option')
+        $option3.value = '3'
+        $option3.selected = 3
+        $option3.innerHTML = 3
+        let $option4 = document.createElement('option')
+        $option4.value = '4'
+        $option4.innerHTML = 4
+
+        $select.appendChild($option1)
+        $select.appendChild($option2)
+        $select.appendChild($option3)
+        $select.appendChild($option4)
 
 
 
-        }
+
+
 
 
 
@@ -203,11 +221,14 @@ class DataTable {
 
 
 
+
+
+
+
 };
 
 
 let poginetion = document.querySelector('.paginettion')
-
 
 
 

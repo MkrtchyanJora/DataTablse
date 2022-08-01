@@ -29,6 +29,32 @@ const data = [
         name: 'Tikran',
         age: 16,
     },
+    {
+        id: 6,
+        name: 'Arpine',
+        age: 20,
+    },
+    {
+        id: 7,
+        name: 'Hripsime',
+        age: 50,
+    },
+    {
+        id: 8,
+        name: 'Vazgen',
+        age: 26,
+    },
+    {
+        id: 9,
+        name: 'Davit',
+        age: 22,
+    },
+    {
+        id: 10,
+        name: 'Hovhannes',
+        age: 21,
+    },
+    
 ];
 
 const dataTable = new DataTable(colums,data)
