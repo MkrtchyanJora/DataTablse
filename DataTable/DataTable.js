@@ -1,134 +1,55 @@
 class DataTable {
-    constructor(colums = [], data = []) {
+    constructor(colums = [], data = [], { notesPage }) {
         this.colums = colums;
         this.data = data;
+        this.originalData = data;
+        this.notesPage = notesPage;
+        this.start = 0;
+        this.end = this.start + this.notesPage;
     };
     createTable() {
+        const $dataTableContainer = document.querySelector('.data-tableContener');
         const $table = document.createElement('table');
         this.table = $table;
-        const $dataTableContener = document.querySelector('.data-tableContener');
-        $dataTableContener.appendChild($table);
+        $dataTableContainer.appendChild($table);
         this.createThead();
-        const $tbody = this.createBody();
-        $table.appendChild($tbody);
-
-        const $trs = this.renderData();
-        console.log($trs);
-        $trs.forEach(($tr) => {
-            $tbody.appendChild($tr);
-        });
-
-
-
-        ////////////////////////////////////////
-        const $selects = this.createSelect()
-        $table.before($selects)
-
-        $selects.onchange = rowCounte
-        function rowCounte(e) {
-            let neil = poginetion.querySelectorAll('.list');
-            neil.forEach(e => e.remove())
-
-            let limit = parseInt(e.target.value);
-            displayPage(limit)
-
-        }
-        let $array = [];
-        for (let i = 0; i < $trs.length; i++) {
-            $array.push($trs[i])
-        }
-
-        function displayPage(limit) {
-            $tbody.innerHTML = '';
-            for (let i = 0; i < limit; i++) {
-
-                $tbody.appendChild($array[i])
-
-            }
-            buttonGenerator(limit)
-
-
-
-
-        }
-        displayPage(3)
-
-        function buttonGenerator(limit) {
-            const noftr = $array.length;
-            if (noftr <= limit) {
-
-                poginetion.style.display = 'none'
-            }
-            else {
-                poginetion.style.display = 'flex'
-                const noPage = Math.ceil(noftr / limit)
-
-                for (let i = 1; i <= noPage; i++) {
-                    const $li = document.createElement('li');
-                    $li.className = 'list';
-                    const $a = document.createElement('a');
-                    $a.href = '#';
-                    $a.setAttribute('data-page', i)
-                    $li.appendChild($a);
-                    $a.innerHTML = i
-                    poginetion.insertBefore($li, poginetion.querySelector('.next'));
-
-                    $a.onclick = e => {
-                        let x = e.target.getAttribute('data-page');
-                        $tbody.innerHTML = ''
-                        x--;
-                        let start = limit * x;
-                        let end = start + limit;
-                        let page = $array.slice(start, end);
-
-                        for (let i = 0; i < page.length; i++) {
-
-                            let item = page[i];
-                            $tbody.appendChild(item)
-                        }
-                    }
-                }
-            }
-
-            let z = 0;
-            function nextElement() {
-                if (this.id == 'next') {
-                    z == $array.length - limit ? (z = 0) : (z += limit);
-                }
-
-                if (this.id == 'prev') {
-                    z == 0 ? $array.length - limit : (z -= limit);
-                }
-
-                $tbody.innerHTML = '';
-                for (let c = z; c < z + limit; c++) {
-                    $tbody.appendChild($array[c])
-                }
-
-
-            }
-            document.getElementById('prev').onclick = nextElement
-            document.getElementById('next').onclick = nextElement
-        }
-
-
-
-
-
-
-
-
-
-
+        this.createBody();
+        this.renderData();
+        this.createPerPage();
+        this.pagination();
+        this.createSearchForm();
+        
     };
-
+    
 
     createThead() {
         const $thead = document.createElement('thead');
         const $tr = document.createElement('tr');
         this.colums.forEach((colum) => {
             const $th = document.createElement('th');
-            $th.innerHTML = colum;
+            let isReverse;
+            $th.setAttribute('data-sort', colum.index);
+
+            $th.addEventListener('click', (e) => {
+                const field = e.target.dataset.sort;
+
+              if(!isReverse){
+                  if (isNaN(+this.data[0][field])) {
+                      this.data.sort((a, b) => a[field].localeCompare(b[field]))
+                  }
+                  this.data.sort((a, b) => a[field] - b[field]);
+                  this.renderData();
+                  isReverse = true;
+
+              }
+                if (isReverse) {
+                    this.data.reverse();
+                    this.renderData();
+                }
+                
+
+            });
+            $th.innerHTML = colum.name;
             $tr.appendChild($th);
         });
         $thead.appendChild($tr);
@@ -142,94 +63,143 @@ class DataTable {
 
     createBody() {
         const $tbody = document.createElement('tbody');
-        return $tbody;
+        this.$tbody = $tbody;
+        this.table.appendChild($tbody);
 
     };
 
     renderData() {
-        return this.data.map((item) => {
-            let $tr = document.createElement('tr');
-            for (let key in item) {
+        const $dataTableContainer = document.querySelector('.data-tableContener');
+        const $tbody = this.table.querySelector('tbody');
+        $tbody.innerHTML = null;
+        this.data.slice(this.start, this.end).map((item) => {
+            const $tr = document.createElement('tr');
+
+            for (const key in item) {
                 const $td = document.createElement('td');
                 $td.innerHTML = item[key];
                 $tr.appendChild($td);
-
-
             };
 
+            const $tdDelete = document.createElement('td');
+            const $checkboxTd = document.createElement('td');
+            const $checkbox = document.createElement('input');
+            $checkbox.type = "checkbox";
+            $checkboxTd.appendChild($checkbox);
+            $tdDelete.setAttribute('data-id', item.id);
+            $checkbox.setAttribute('data-id', item.id);
+            $tdDelete.className = 'remove';
+            $tdDelete.innerHTML = 'Delete';
+            $tdDelete.addEventListener('click', (e) => {
+                this.data.filter((elem, index) => {
+
+                    if (elem.id == e.target.dataset.id) {
+                        this.data.splice(index, 1);
+                        this.renderData();
+                        this.pagination();
+                        const $ul = document.querySelector('ul');
+                        $dataTableContainer.removeChild($ul);
+                        
+                        
+                    };
+                });
+            });
+
+            $tr.appendChild($tdDelete);
+            $tr.appendChild($checkboxTd);
+            $tbody.appendChild($tr);
+
+        });
+
+    };
+
+    pagination() {
+        let self = this;
+        const $dataTableContainer = document.querySelector('.data-tableContener');
+        const $ul = document.createElement('ul');
+        const countItems = Math.ceil(this.data.length / this.notesPage);
+        $ul.setAttribute('id', 'pagination');
+        $dataTableContainer.appendChild($ul);
+        let items = [];
+
+        for (let i = 1; i <= countItems; i++) {
+            let $li = document.createElement('li');
+            $li.innerHTML = i;
+            $ul.appendChild($li);
+            items.push($li);
+        };
+
+        for (let item of items) {
+            item.addEventListener('click', function () {
+
+                let pageNum = this.innerHTML;
+                self.start = (pageNum - 1) * self.notesPage;
+                self.end = self.start + self.notesPage;
+                let newPageContainer = document.querySelector('tbody');
+                newPageContainer.innerHTML = null;
+                $dataTableContainer.removeChild($ul);
+                self.renderData();
+                self.pagination();
+
+            });
+        };
+    };
 
 
+    createPerPage() {
+        const $select = document.createElement('select');
+        const $ul = document.getElementById('pagination');
 
-            return $tr;
+        for (let i = 3; i < 10; i = i + 2) {
+            let $option = document.createElement('option');
+            $option.innerHTML = i;
+            $select.appendChild($option);
+        }
+
+        this.table.appendChild($select);
+        $select.addEventListener('change', (e) => {
+            const $pagination = document.querySelector('#pagination');
+            this.notesPage = +e.target.value;
+            this.end = this.start + this.notesPage;
+            $pagination.remove();
+            this.renderData();
+            this.pagination();
         });
     };
 
+    createSearchForm() {
+        const $ul = document.querySelector('ul');
+        const $input = document.createElement('input');
+        $input.className = 'search';
+        $input.placeholder = 'Search'
+        const $dataTableContainer = document.querySelector('.data-tableContener');
+        $dataTableContainer.prepend($input);
+        $input.addEventListener('input', (e) => {
+            let $value = e.target.value;
 
-    createSelect() {
-        const $select = document.createElement('select')
-        $select.className = 'select'
-        let $option1 = document.createElement('option')
-        $option1.value = '1'
-        $option1.innerHTML = 1
-        let $option2 = document.createElement('option')
-        $option2.value = '2'
-        $option2.innerHTML = 2
-        let $option3 = document.createElement('option')
-        $option3.value = '3'
-        $option3.selected = 3
-        $option3.innerHTML = 3
-        let $option4 = document.createElement('option')
-        $option4.value = '4'
-        $option4.innerHTML = 4
+            if ($value == '') {
+                this.data = this.originalData;
+            }
 
-        $select.appendChild($option1)
-        $select.appendChild($option2)
-        $select.appendChild($option3)
-        $select.appendChild($option4)
+            this.data = this.data.filter((elem) => {
+                for (let key in elem) {
 
+                    if (elem[key].toString().includes($value)) {
+                        return elem;
+                    };
 
+                };
+            });
+            this.renderData();
+            this.pagination();
+            const $ul = document.querySelector('ul');
+            $dataTableContainer.removeChild($ul);
 
-
-
-
-
-
-
-
-
-        return $select
-
+        });
 
     };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 };
-
-
-let poginetion = document.querySelector('.paginettion')
-
 
 
 

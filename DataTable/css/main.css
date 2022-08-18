@@ -2,22 +2,27 @@ table{
     border: 1px solid #D9D9D9;
     width: 600px;
     margin:  0 auto;
-    margin-top: 50px;
+    margin-top: 19px;
+
+}
+
+.data-tableContener{
     font-size: 20px;
-
-
+    margin-left: 20px;
+    margin-top: 50px;
+    
 }
 td:hover{
     cursor: pointer;
     background-color: #D9D9D9;
 }
 
-tr{
+table tr{
     border:  1px solid #D9D9D9;
     
 }
 
-td{
+ table td{
     border: 1px solid #D9D9D9;
     text-align:  center;
 }
@@ -26,7 +31,7 @@ td{
     width: 100%;
     
 }
-th{
+ table th{
     border:  1px solid #D9D9D9;
 }
 
@@ -35,37 +40,46 @@ tr:nth-child(2n){
 }
 
 
-.select{
-    margin-left: 400px;
-    width: 50px;
-}
-
-
-.paginettion{
+#pagination{
     display: flex;
-    justify-content: center;
-}
-
-.paginettion>li>a{
-    margin-left: 10px;
-    text-decoration: none;
-    padding: 13px;
-    border: 1px solid #D9D9D9;
-    color: #97B8D1;
-   
-  
-}
-
-.paginettion>li>a:hover{
-    background-color: #2F79B9;
-}
-
-
-
-
-.paginettion>li{
+    justify-content: flex-start;
     list-style: none;
     margin-top: 20px;
+    
 }
+
+#pagination>li{
+    padding: 10px;
+    border: 1px solid #D9D9D9;
+    margin-left: 5px;
+    cursor: pointer;
+   
+}
+
+#pagination>li:hover{
+    background-color: aquamarine;
+    transition: 0.5s ease-in;
+}
+
+
+.search{
+    width: 30%;
+    display: block;
+    margin-left: 60px;
+    margin-bottom: 20px;
+    padding: 5px;
+    border: 1px solid #D9D9D9;
+
+    
+}
+
+
+
+
+
+
+
+
+
 
 
