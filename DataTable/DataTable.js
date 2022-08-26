@@ -1,15 +1,21 @@
 class DataTable {
-    constructor(colums = [], data = [], { notesPage }) {
+    constructor(colums = [], data = [], { notesPage, rowClassName, cellClassName, tableClassName }) {
         this.colums = colums;
         this.data = data;
         this.originalData = data;
         this.notesPage = notesPage;
         this.start = 0;
         this.end = this.start + this.notesPage;
+
+        this.rowClassName = `datatable__row ${rowClassName}`;
+        this.cellClassName = `datatable__cell${cellClassName}`;
+        this.tableClassName = `tableClassname ${tableClassName}`;
+            
     };
     createTable() {
         const $dataTableContainer = document.querySelector('.data-tableContener');
         const $table = document.createElement('table');
+        $table.setAttribute('class', this.tableClassName);
         this.table = $table;
         $dataTableContainer.appendChild($table);
         this.createThead();
@@ -25,6 +31,7 @@ class DataTable {
     createThead() {
         const $thead = document.createElement('thead');
         const $tr = document.createElement('tr');
+        $tr.setAttribute('class', this.rowClassName);
         this.colums.forEach((colum) => {
             const $th = document.createElement('th');
             let isReverse;
@@ -55,10 +62,6 @@ class DataTable {
         $thead.appendChild($tr);
         this.table.appendChild($thead);
 
-
-
-
-
     };
 
     createBody() {
@@ -74,6 +77,7 @@ class DataTable {
         $tbody.innerHTML = null;
         this.data.slice(this.start, this.end).map((item) => {
             const $tr = document.createElement('tr');
+            $tr.setAttribute('class',this.rowClassName);
 
             for (const key in item) {
                 const $td = document.createElement('td');
@@ -83,7 +87,7 @@ class DataTable {
 
             const $tdDelete = document.createElement('td');
             const $checkboxTd = document.createElement('td');
-            const $checkbox = document.createElement('input');
+            const $checkbox = document.createElement('input');  
             $checkbox.type = "checkbox";
             $checkboxTd.appendChild($checkbox);
             $tdDelete.setAttribute('data-id', item.id);
@@ -171,7 +175,7 @@ class DataTable {
         const $ul = document.querySelector('ul');
         const $input = document.createElement('input');
         $input.className = 'search';
-        $input.placeholder = 'Search'
+        $input.placeholder = 'Search';
         const $dataTableContainer = document.querySelector('.data-tableContener');
         $dataTableContainer.prepend($input);
         $input.addEventListener('input', (e) => {
@@ -179,7 +183,7 @@ class DataTable {
 
             if ($value == '') {
                 this.data = this.originalData;
-            }
+            };
 
             this.data = this.data.filter((elem) => {
                 for (let key in elem) {

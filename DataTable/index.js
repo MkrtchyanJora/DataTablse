@@ -5,7 +5,7 @@ const colums = [
     { name: 'ID', index: 'id' },
     { name: 'NAME', index: 'name' },
     { name: 'AGE', index: 'age' },
-    { name: 'Remove' },
+    
 ];
 
 
@@ -66,6 +66,7 @@ const data = [
 
 const options = {
     notesPage: 3,
+    
 
 };
 Element.prototype.DataTable = function (colums, data, options) {

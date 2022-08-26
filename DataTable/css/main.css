@@ -1,8 +1,8 @@
 table{
     border: 1px solid #D9D9D9;
-    width: 600px;
     margin:  0 auto;
     margin-top: 19px;
+    width: 50%;
 
 }
 
@@ -28,7 +28,7 @@ table tr{
 }
 
 .data-tableContener{
-    width: 100%;
+    width: 80%;
     
 }
  table th{
@@ -72,7 +72,6 @@ tr:nth-child(2n){
 
     
 }
-
 
 
 
